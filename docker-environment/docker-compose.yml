@@ -1,0 +1,80 @@
+version: '3.5'
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  mysql:
+    driver: local
+  redis:
+    driver: local
+
+services:
+  client-gateway:
+    build:
+      context: ./node-app
+      args:
+        - NODE_VERSION=${NODE_VERSION}
+    volumes:
+      - ../client-gateway:/var/www
+    command: npm run start:debug
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+    ports:
+      - "8000:3000"
+    networks:
+      - frontend
+      - backend
+
+  conversion-service:
+    build:
+      context: ./node-app
+      args:
+        - NODE_VERSION=${NODE_VERSION}
+    volumes:
+      - ../conversion-service:/var/www
+    command: npm run start:debug
+    environment:
+      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:${MYSQL_PORT}/${MYSQL_DATABASE}
+      NODE_ENV: development
+      PORT: 3000
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - "8008:3000"
+    networks:
+      - backend
+
+    ### Redis ################################################
+  redis:
+    image: redis:latest
+    volumes:
+      - ${DATA_PATH_HOST}/redis:/data
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - backend
+
+  ### MySQL ################################################
+  mysql:
+    build:
+      context: ./mysql
+      args:
+        - MYSQL_VERSION=${MYSQL_VERSION}
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+      - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+    ports:
+      - "${MYSQL_PORT}:3306"
+    networks:
+      - backend

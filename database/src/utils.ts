@@ -1,10 +1,11 @@
-import { TableColumnOptions } from 'typeorm'
+import {TableColumnOptions, TableForeignKeyOptions} from 'typeorm'
 
 const primaryIdColumn = (): TableColumnOptions => {
     return {
         name: 'id',
         type: 'int',
         isPrimary: true,
+        unsigned: true,
     }
 }
 
@@ -32,9 +33,28 @@ const updatedAtColumn = (): TableColumnOptions => {
     }
 }
 
+const partnerIdColumn = (): TableColumnOptions => {
+    return {
+        name: 'partner_id',
+        type: 'int',
+        unsigned: true,
+    }
+}
+
+const partnerIdForeignKeyOptions = (): TableForeignKeyOptions => {
+    return {
+        columnNames: ['partner_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'partners',
+        onDelete: 'CASCADE',
+    }
+}
+
 export {
     primaryIdColumn,
     uidColumn,
     createdAtColumn,
     updatedAtColumn,
+    partnerIdColumn,
+    partnerIdForeignKeyOptions,
 }

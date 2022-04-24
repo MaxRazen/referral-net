@@ -1,26 +1,17 @@
-import { MigrationInterface, Table, QueryRunner } from 'typeorm'
+import { Table, MigrationInterface, QueryRunner } from "typeorm"
 import { primaryIdColumn, uidColumn, createdAtColumn, updatedAtColumn } from '../utils'
 
-export class CreatePartnersTable1650722411927 implements MigrationInterface {
+export class CreateCustomersTable1650818530502 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: 'partners',
+                name: 'customers',
                 columns: [
                     primaryIdColumn(),
                     uidColumn(),
                     {
-                        name: 'company_name',
-                        type: 'varchar',
-                    },
-                    {
-                        name: 'email',
-                        type: 'varchar',
-                        isUnique: true,
-                    },
-                    {
-                        name: 'password',
+                        name: 'external_id',
                         type: 'varchar',
                     },
                     createdAtColumn(),
@@ -31,7 +22,7 @@ export class CreatePartnersTable1650722411927 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('partners');
+        await queryRunner.dropTable('customers');
     }
 
 }

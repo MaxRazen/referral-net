@@ -10,13 +10,13 @@ export class CreateUsersTable1650722407124 implements MigrationInterface {
                 columns: [
                     primaryIdColumn(),
                     {
+                        name: 'full_name',
+                        type: 'varchar',
+                    },
+                    {
                         name: 'email',
                         type: 'varchar',
                         isUnique: true,
-                    },
-                    {
-                        name: 'name',
-                        type: 'varchar',
                     },
                     {
                         name: 'password',
@@ -30,6 +30,7 @@ export class CreateUsersTable1650722407124 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropTable('users');
     }
 
 }

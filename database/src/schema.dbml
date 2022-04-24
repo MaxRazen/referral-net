@@ -1,0 +1,95 @@
+
+// Admin Users
+Table users {
+  id int [pk, increment]
+  full_name varchar [not null]
+  email varchar [unique, not null]
+  password varchar [not null]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+}
+
+// Partners
+Table partners {
+  id int [pk, increment]
+  uid varchar(12) [unique]
+  company_name varchar [not null]
+  email varchar [unique, not null]
+  password varchar [not null]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+}
+
+Table partner_credentials {
+  id int [pk, increment]
+  partner_id "int unsigned" [ref: > partners.id]
+  key varchar [unique]
+  secret varchar [not null]
+  created_at timestamp [default: `now()`]
+}
+
+Table partner_assets {
+  id int [pk, increment]
+  partner_id "int unsigned" [ref: > partners.id]
+  code varchar [unique, not null]
+  created_at timestamp [default: `now()`]
+}
+
+// Conversions
+Table customers {
+  id int [pk, increment]
+  uid varchar(12) [unique]
+  external_id varchar [not null]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+}
+
+Table conversions {
+  id int [pk, increment]
+  uid varchar(12) [unique]
+  partner_id "int unsigned" [ref: > partners.id]
+  asset_id "int unsigned" [null, ref: > partner_assets.id]
+  external_id varchar [not null]
+  customer_id "int unsigned" [ref: > customers.id]
+  meta_data json [not null]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+}
+
+Table commissions {
+  id int [pk, increment]
+  uid varchar(12) [unique]
+  conversion_id "int unsigned" [ref: > conversions.id]
+  status commissions_status
+  amount "int unsigned" [not null]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+}
+
+Enum commissions_status {
+  pending
+  approved
+  disapproved
+}
+
+// Activity log
+Table activities {
+  id bigint [pk, increment]
+  causer_type activities_causer_types
+  causer_id "int unsigned" [not null]
+  action int [not null] // or use enum
+  data json [not null]
+  created_at timestamp [default: `now()`]
+
+  indexes {
+    causer_id
+    action
+    created_at
+  }
+}
+
+Enum activities_causer_types {
+  system
+  user
+  partner
+}

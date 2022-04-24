@@ -6,6 +6,12 @@
    "license": "MIT",
    "devDependencies": {
       "@types/node": "^16.11.10",
+      "@typescript-eslint/eslint-plugin": "^5.20.0",
+      "@typescript-eslint/parser": "^5.20.0",
+      "eslint": "^8.14.0",
+      "eslint-config-prettier": "^8.5.0",
+      "eslint-plugin-prettier": "^4.0.0",
+      "prettier": "^2.6.2",
       "ts-node": "10.7.0",
       "typescript": "4.5.2"
    },
@@ -17,6 +23,7 @@
    },
    "scripts": {
       "start": "ts-node src/index.ts",
+      "lint": "eslint \"src/**/*.ts\" --fix",
       "typeorm": "typeorm-ts-node-commonjs",
       "migration:create": "yarn run typeorm migration:create",
       "migration:run": "yarn run typeorm migration:run -d ./src/index.ts",

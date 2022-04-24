@@ -39,6 +39,8 @@ services:
       - ../conversion-service:/var/www
     command: npm run start:debug
     environment:
+      REDIS_HOST: redis
+      REDIS_PORT: ${REDIS_PORT}
       DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:${MYSQL_PORT}/${MYSQL_DATABASE}
       NODE_ENV: development
       PORT: 3000

@@ -30,6 +30,10 @@ export class CreateCommissionsTable1650822734233 implements MigrationInterface {
             enum: ["pending", "approved", "disapproved"],
           },
           {
+            name: "currency",
+            type: "char(3)",
+          },
+          {
             name: "amount",
             type: "int",
             unsigned: true,

@@ -32,11 +32,6 @@ export class CreateConversionsTable1650818678816 implements MigrationInterface {
             type: "varchar",
           },
           {
-            name: "customer_id",
-            type: "int",
-            unsigned: true,
-          },
-          {
             name: "meta_data",
             type: "json",
           },
@@ -57,15 +52,6 @@ export class CreateConversionsTable1650818678816 implements MigrationInterface {
         columnNames: ["asset_id"],
         referencedColumnNames: ["id"],
         referencedTableName: "partner_assets",
-      })
-    );
-
-    await queryRunner.createForeignKey(
-      "conversions",
-      new TableForeignKey({
-        columnNames: ["customer_id"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "customers",
       })
     );
   }

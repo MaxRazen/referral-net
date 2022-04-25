@@ -36,21 +36,12 @@ Table partner_assets {
 }
 
 // Conversions
-Table customers {
-  id int [pk, increment]
-  uid varchar(12) [unique]
-  external_id varchar [not null]
-  created_at timestamp [default: `now()`]
-  updated_at timestamp [default: `now()`]
-}
-
 Table conversions {
   id int [pk, increment]
   uid varchar(12) [unique]
   partner_id "int unsigned" [ref: > partners.id]
   asset_id "int unsigned" [null, ref: > partner_assets.id]
   external_id varchar [not null]
-  customer_id "int unsigned" [ref: > customers.id]
   meta_data json [not null]
   created_at timestamp [default: `now()`]
   updated_at timestamp [default: `now()`]
@@ -60,6 +51,7 @@ Table commissions {
   id int [pk, increment]
   uid varchar(12) [unique]
   conversion_id "int unsigned" [ref: > conversions.id]
+  currency char(3) [not null]
   status commissions_status
   amount "int unsigned" [not null]
   created_at timestamp [default: `now()`]

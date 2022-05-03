@@ -6,6 +6,8 @@ const primaryIdColumn = (): TableColumnOptions => {
     type: "int",
     isPrimary: true,
     unsigned: true,
+    isGenerated: true,
+    generationStrategy: 'increment',
   };
 };
 
